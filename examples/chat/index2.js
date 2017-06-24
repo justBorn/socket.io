@@ -27,9 +27,12 @@ http.createServer(function (req, res) {
 var conversation = {};
 
 Message.find({}, function (err, docs) {
-    console.log('docs',docs);
-    conversation = docs;
+    console.log('docs', docs);
 
+    docs.forEach(function (doc) {
+        conversation[doc.conversationId] = conversation[doc.conversationId] || [];
+        conversation[doc.conversationId].push(doc);
+    });
 });
 
 
