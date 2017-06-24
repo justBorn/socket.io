@@ -38,7 +38,7 @@ var server = ws.createServer(function (connection) {
             case 'login':
                 broadcast({
                     event: 'login',
-                    conversation: conversation
+                    data: {conversation: conversation}
 
                 })
         }
