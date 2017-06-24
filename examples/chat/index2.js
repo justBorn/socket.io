@@ -18,16 +18,16 @@ var server = ws.createServer(function (connection) {
         switch (str.event) {
             case 'new message' :
                 var data = str.data;
-                console.log( 'new message : ' , data);
+                console.log('new message : ', data);
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
 
                 broadcast({
-                    event: 'new message conversationID:'+ data.conversationId,
+                    event: 'new message conversationID:' + data.conversationId,
                     data: str.data.message
-                        // username: str.data.username,
-                        // message: str.data.message,
-                        // conversationId: str.data.conversationId
+                    // username: str.data.username,
+                    // message: str.data.message,
+                    // conversationId: str.data.conversationId
 
                 });
 
@@ -38,7 +38,17 @@ var server = ws.createServer(function (connection) {
                     event: 'login',
                     data: {conversation: conversation}
 
-                })
+                });
+                break;
+            case 'get message conversationID:' + data.conversationId:
+                broadcast({
+                    event: 'get message conversationID:' + data.conversationId,
+                    data: {conversation: conversation[data.conversationId]}
+
+                });
+                break;
+
+
         }
 
 
