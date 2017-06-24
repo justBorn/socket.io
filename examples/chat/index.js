@@ -16,15 +16,27 @@ app.use(express.static(__dirname + '/public'));
 
 var numUsers = 0;
 
+
+var conversation = {}
+
+
 io.on('connection', function (socket) {
   var addedUser = false;
 
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function (data) {
     // we tell the client to execute 'new message'
+
+        conversation[data.conversationId] =     conversation[data.conversationId] || [];
+        conversation[data.conversationId].push({
+      username: socket.username,
+      message: data.message});
+
+
     socket.broadcast.emit('new message', {
       username: socket.username,
-      message: data
+      message: data.message,
+      conversationId : data.conversationId
     });
   });
 
@@ -37,7 +49,8 @@ io.on('connection', function (socket) {
     ++numUsers;
     addedUser = true;
     socket.emit('login', {
-      numUsers: numUsers
+      numUsers: numUsers,
+      conversation :conversation
     });
     // echo globally (all clients) that a person has connected
     socket.broadcast.emit('user joined', {
@@ -46,19 +59,21 @@ io.on('connection', function (socket) {
     });
   });
 
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
+  
 
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
+  // // when the client emits 'typing', we broadcast it to others
+  // socket.on('typing', function () {
+  //   socket.broadcast.emit('typing', {
+  //     username: socket.username
+  //   });
+  // });
+
+  // // when the client emits 'stop typing', we broadcast it to others
+  // socket.on('stop typing', function () {
+  //   socket.broadcast.emit('stop typing', {
+  //     username: socket.username
+  //   });
+  // });
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {

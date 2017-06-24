@@ -33,6 +33,8 @@ $(function() {
       message += "there are " + data.numUsers + " participants";
     }
     log(message);
+
+    console.log(data.conversation)
   }
 
   // Sets the client's username
@@ -64,7 +66,7 @@ $(function() {
         message: message
       });
       // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      socket.emit('new message', {message :message, conversationId : 99});
     }
   }
 
