@@ -13,7 +13,7 @@ var server = ws.createServer(function (connection) {
     var addedUser = false;
     connection.on("text", function (str) {
 
-
+        console.log(str)
         str = JSON.parse(str);
         switch (str.event) {
             case 'new message' :
