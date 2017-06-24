@@ -40,15 +40,16 @@ var server = ws.createServer(function (connection) {
 
                 });
                 break;
-            case 'get message conversationID:' + data.conversationId:
-                broadcast({
-                    event: 'get message conversationID:' + data.conversationId,
-                    data: {conversation: conversation[data.conversationId]}
-
-                });
-                break;
 
 
+
+        }
+        if(str.event.indexOf('get message conversationID:') === 0){
+            broadcast({
+                event: 'old message conversationID:' + data.conversationId,
+                data: {conversation: conversation[data.conversationId]}
+
+            });
         }
 
 
