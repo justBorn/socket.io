@@ -49,7 +49,10 @@ var server = ws.createServer(function (connection) {
                     console.log('saved : ',msg);
 
                     msg = msg.toObject();
+                    console.log(msg)
                     msg._id = msg.id;
+                    console.log(msg)
+
                     broadcast({
                         event: 'new message conversationID:' + data.conversationId,
                         data: msg
