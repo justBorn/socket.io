@@ -42,9 +42,9 @@ var server = ws.createServer(function (connection) {
                 conversation[data.conversationId].push(data.message);
 
 
-                var _id = data.message._id;
+                var customId = data.message._id;
                 delete data.message._id ;
-                data.message.id = _id;
+                data.message.customId = customId;
                 console.log('data.message',data.message);
                 var msg = new Message(data.message);
                 msg.save(function (err, msg) {
@@ -53,7 +53,7 @@ var server = ws.createServer(function (connection) {
 
                     msg = msg.toObject();
                     console.log(msg)
-                    msg._id = msg.id;
+                    msg._id = msg.customId;
                     console.log(msg)
 
                     broadcast({
