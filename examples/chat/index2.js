@@ -41,8 +41,8 @@ var server = ws.createServer(function (connection) {
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
 
-                var Message = new Message(data.message);
-                Message.save(function (err, msg) {
+                var msg = new Message(data.message);
+                msg.save(function (err, msg) {
                     if (err) return console.error(err);
                     console.log('saved : ',msg);
                 });
