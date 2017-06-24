@@ -8,14 +8,13 @@ mongoose.connect('mongodb://localhost/crowclaim');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.once('open', function () {
     // we're connected!
     console.log('we\'re connected!')
 });
 
 
-var chatMessage = mongoose.Schema({
-},{ strict: false });
+var chatMessage = mongoose.Schema({}, {strict: false});
 
 var Message = mongoose.model('Message', chatMessage);
 
@@ -24,7 +23,13 @@ http.createServer(function (req, res) {
     fs.createReadStream("index.html").pipe(res)
 }).listen(8080);
 
+
 var conversation = {};
+
+Message.find({}, function (err, docs) {
+    conversation = docs;
+
+})
 
 
 var server = ws.createServer(function (connection) {
@@ -43,13 +48,13 @@ var server = ws.createServer(function (connection) {
 
 
                 var customId = data.message._id;
-                delete data.message._id ;
+                delete data.message._id;
                 data.message.customId = customId;
-                console.log('data.message',data.message);
+                console.log('data.message', data.message);
                 var msg = new Message(data.message);
                 msg.save(function (err, msg) {
                     if (err) return console.error(err);
-                    console.log('saved : ',msg);
+                    console.log('saved : ', msg);
 
                     msg = msg.toObject();
                     console.log(msg)
@@ -67,7 +72,6 @@ var server = ws.createServer(function (connection) {
                 });
 
 
-
                 break;
 
             case 'login':
@@ -79,9 +83,8 @@ var server = ws.createServer(function (connection) {
                 break;
 
 
-
         }
-        if(str.event.indexOf('get message conversationID:') === 0){
+        if (str.event.indexOf('get message conversationID:') === 0) {
             broadcast({
                 event: 'old message conversationID:' + data.conversationId,
                 data: {conversation: conversation[data.conversationId]}
