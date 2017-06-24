@@ -15,9 +15,10 @@ var server = ws.createServer(function (connection) {
 
         console.log(str)
         str = JSON.parse(str);
+        var data = str.data;
+
         switch (str.event) {
             case 'new message' :
-                var data = str.data;
                 console.log('new message : ', data);
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
