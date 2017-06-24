@@ -41,21 +41,26 @@ var server = ws.createServer(function (connection) {
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
 
+                data.message.id = data.message._id;
                 delete data.message._id ;
                 var msg = new Message(data.message);
                 msg.save(function (err, msg) {
                     if (err) return console.error(err);
                     console.log('saved : ',msg);
+
+
+                    msg._id = msg.id;
+                    broadcast({
+                        event: 'new message conversationID:' + data.conversationId,
+                        data: msg
+                        // username: str.data.username,
+                        // message: str.data.message,
+                        // conversationId: str.data.conversationId
+
+                    });
                 });
 
-                broadcast({
-                    event: 'new message conversationID:' + data.conversationId,
-                    data: str.data.message
-                    // username: str.data.username,
-                    // message: str.data.message,
-                    // conversationId: str.data.conversationId
 
-                });
 
                 break;
 
