@@ -23,7 +23,6 @@ var server = ws.createServer(function (connection) {
                     username: data.username,
                     message: data.message
                 });
-                break;
 
                 broadcast({
                     event: 'new message',
@@ -32,6 +31,15 @@ var server = ws.createServer(function (connection) {
                         message: str.data.message,
                         conversationId: str.data.conversationId
                     }
+                });
+
+                break;
+
+            case 'login':
+                broadcast({
+                    event: 'login',
+                    conversation: conversation
+
                 })
         }
 
