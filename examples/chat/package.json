@@ -8,6 +8,7 @@
   "license": "BSD",
   "dependencies": {
     "express": "4.13.4",
+    "mongoose": "^4.10.8",
     "nodejs-websocket": "^1.7.1",
     "socket.io": "^2.0.3"
   },

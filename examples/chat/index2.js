@@ -2,6 +2,24 @@ var http = require("http");
 var ws = require("nodejs-websocket");
 var fs = require("fs");
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/crowclaim');
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    // we're connected!
+    console.log('we\'re connected!')
+});
+
+
+var chatMessage = mongoose.Schema({
+},{ strict: false });
+
+var Message = mongoose.model('Message', chatMessage);
+
+
 http.createServer(function (req, res) {
     fs.createReadStream("index.html").pipe(res)
 }).listen(8080);
@@ -22,6 +40,12 @@ var server = ws.createServer(function (connection) {
                 console.log('new message : ', data);
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
+
+                var Message = new Message(data.message);
+                Message.save(function (err, msg) {
+                    if (err) return console.error(err);
+                    console.log('saved : ',msg);
+                });
 
                 broadcast({
                     event: 'new message conversationID:' + data.conversationId,
