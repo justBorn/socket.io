@@ -18,6 +18,7 @@ var server = ws.createServer(function (connection) {
         switch (str.event) {
             case 'new message' :
                 var data = str.data;
+                console.log( 'new message : ' , data);
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
                 conversation[data.conversationId].push(data.message);
 
