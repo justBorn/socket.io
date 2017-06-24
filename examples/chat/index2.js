@@ -27,9 +27,10 @@ http.createServer(function (req, res) {
 var conversation = {};
 
 Message.find({}, function (err, docs) {
+    console.log('docs',docs);
     conversation = docs;
 
-})
+});
 
 
 var server = ws.createServer(function (connection) {
