@@ -17,20 +17,17 @@ var server = ws.createServer(function (connection) {
         str = JSON.parse(str);
         switch (str.event) {
             case 'new message' :
-                var data = str.data
+                var data = str.data;
                 conversation[data.conversationId] = conversation[data.conversationId] || [];
-                conversation[data.conversationId].push({
-                    username: data.username,
-                    message: data.message
-                });
+                conversation[data.conversationId].push(data.message);
 
                 broadcast({
-                    event: 'new message',
-                    data: {
-                        username: str.data.username,
-                        message: str.data.message,
-                        conversationId: str.data.conversationId
-                    }
+                    event: 'new message conversationID:'+ data.conversationId,
+                    data: str.data.message
+                        // username: str.data.username,
+                        // message: str.data.message,
+                        // conversationId: str.data.conversationId
+
                 });
 
                 break;
